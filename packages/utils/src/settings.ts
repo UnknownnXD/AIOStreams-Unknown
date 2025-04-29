@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import p from '../package.json';
 
 try {
   dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
@@ -26,6 +27,8 @@ export class Settings {
   public static readonly SHOW_DIE = process.env.SHOW_DIE
     ? process.env.SHOW_DIE === 'true'
     : false;
+  public static readonly ADDON_REQUEST_USER_AGENT =
+    process.env.ADDON_REQUEST_USER_AGENT ?? `AIOStreams/${p.version}`;
   public static readonly LOG_SENSITIVE_INFO = process.env.LOG_SENSITIVE_INFO
     ? process.env.LOG_SENSITIVE_INFO === 'true'
     : false;
@@ -45,6 +48,12 @@ export class Settings {
       ? 'json'
       : 'text'
     : 'text';
+
+  // Stremio Addon Site
+  public static readonly STREMIO_ADDONS_CONFIG_ISSUER =
+    process.env.STREMIO_ADDONS_AUTH_ISSUER || 'https://stremio-addons.net';
+  public static readonly STREMIO_ADDONS_CONFIG_SIGNATURE =
+    process.env.STREMIO_ADDONS_CONFIG_SIGNATURE || null;
 
   // Cache settings
   public static readonly CACHE_STREAM_RESULTS = process.env.CACHE_STREAM_RESULTS
@@ -226,6 +235,14 @@ export class Settings {
   public static readonly DEFAULT_DEBRIDIO_TIMEOUT = process.env
     .DEFAULT_DEBRIDIO_TIMEOUT
     ? parseInt(process.env.DEFAULT_DEBRIDIO_TIMEOUT)
+    : undefined;
+
+  public static readonly STREMTHRU_STORE_URL =
+    process.env.STREMTHRU_STORE_URL ||
+    'https://stremthru.elfhosted.com/stremio/store/';
+  public static readonly DEFAULT_STREMTHRU_STORE_TIMEOUT = process.env
+    .DEFAULT_STREMTHRU_STORE_TIMEOUT
+    ? parseInt(process.env.DEFAULT_STREMTHRU_STORE_TIMEOUT)
     : undefined;
 
   public static readonly DEFAULT_DMM_CAST_TIMEOUT = process.env
