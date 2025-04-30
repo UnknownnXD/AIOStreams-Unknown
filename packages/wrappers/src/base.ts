@@ -50,9 +50,14 @@ export class BaseWrapper {
     (this.indexerTimeout = indexerTimeout || Settings.DEFAULT_TIMEOUT),
       (this.userConfig = userConfig);
     this.headers = new Headers({
-      'User-Agent': Settings.ADDON_REQUEST_USER_AGENT,
+      'User-Agent': Settings.DEFAULT_USER_AGENT,
       ...(requestHeaders || {}),
     });
+    for (const [key, value] of this.headers.entries()) {
+      if (!value) {
+        this.headers.delete(key);
+      }
+    }
   }
 
   protected standardizeManifestUrl(url: string): string {
@@ -165,6 +170,10 @@ export class BaseWrapper {
         userIp ? maskSensitiveInfo(userIp) : 'not set'
       }`
     );
+    logger.debug(
+      `Request Headers: ${maskSensitiveInfo(JSON.stringify(Object.fromEntries(this.headers)))}`
+    );
+
     let response = useProxy
       ? fetch(url, {
           method: 'GET',
